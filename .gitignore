@@ -1,0 +1,19 @@
+# Node modules
+node_modules/
+
+# 환경변수
+.env
+.env.* 
+
+# 로그 파일
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 빌드 결과
+.next/
+dist/
+
+# macOS, VSCode 관련
+.DS_Store
+.vscode/
