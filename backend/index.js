@@ -82,6 +82,75 @@ const exampleUserInfo = {
 };
 */
 
+const testApi = async () => {
+  const userInfo = {
+    id: 1,
+    type: "user",
+    gender: {
+      id: 1,
+      type: "female",
+      text: "여자",
+    },
+    name: "박지우",
+    age: "27",
+    mbti: "estj",
+  };
+
+  const partnerInfo = {
+    id: 1,
+    type: "partner",
+    gender: {
+      id: 1,
+      type: "male",
+      text: "남자",
+    },
+    name: "조하운",
+    age: "31",
+    mbti: "infp",
+  };
+  const messages = initialMessage(userInfo, partnerInfo);
+  const prompt = formatMessagesToPrompt(messages);
+
+  const response = await fetch(HF_API_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.HF_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ inputs: prompt }),
+  });
+  const text = await response.text(); // ✅ 먼저 읽기
+
+  if (!response.ok) {
+    console.error("❌ API 호출 실패:", text);
+    return;
+  }
+
+  let result;
+  try {
+    result = JSON.parse(text);
+  } catch (err) {
+    console.error("❌ JSON 파싱 실패:", text);
+    return;
+  }
+
+  console.log("⭐️ 파싱 result:", result);
+  const fullText = result?.[0]?.generated_text || "";
+  // 'Assistant:' 이후 응답만 잘라내기
+  const splitIndex = fullText.lastIndexOf("Assistant:");
+  const finalAnswer =
+    splitIndex !== -1
+      ? fullText.substring(splitIndex + "Assistant:".length).trim()
+      : fullText;
+
+  const data = [...messages, { role: "assistant", content: finalAnswer }];
+  const resultData = res.json({ data });
+  res.json({ data });
+  console.log("✅ testApi result:", resultData);
+};
+
+testApi();
+
 /* /info: 유저 & 파트너 프로필 기반 초기 대화 생성 */
 app.post("/info", async (req, res) => {
   const { userInfo, partnerInfo } = req.body;
@@ -98,6 +167,7 @@ app.post("/info", async (req, res) => {
   });
 
   const result = await response.json();
+  console.log("info result >> ", result);
   const generatedText = result?.[0]?.generated_text || "";
 
   const data = [...messages, { role: "assistant", content: generatedText }];
