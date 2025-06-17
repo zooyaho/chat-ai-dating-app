@@ -3,17 +3,18 @@ import Button from "../components/Button";
 import Title from "../components/Title";
 import PrevButton from "../components/PrevButton";
 import GenderRadioGroup from "../components/GenderRadioGroup";
-import { genderList } from "../data/common";
+import { genderList, userInfoFields } from "../data/common";
 import type { GenderInfoType } from "../types/genderInfo.type";
 import { useState } from "react";
-import { initialUserInfo, userInfoFields } from "../data/initialState";
+import { initialUserInfo } from "../data/initialState";
 import Input from "../components/Input";
 
 const UserInfo = () => {
   const history = useNavigate();
   const [userInfo, setUserInfo] = useState(initialUserInfo);
 
-  const handleClick = () => {
+  // 다음 버튼 클릭 핸들러
+  const handleNextPageClick = () => {
     history("/partner-info");
   };
 
@@ -30,7 +31,7 @@ const UserInfo = () => {
 
   return (
     <div className="w-full h-full px-6 pt-10 break-keep overflow-auto">
-      <i className="w-168 h-168 rounded-full bg-date-pink-500 fixed -z-10 -left-60 -top-104"></i>
+      <i className="w-[44rem] h-[44rem] rounded-full bg-date-pink-500 fixed -z-10 -left-60 -top-104"></i>
       {/* 뒤로가기 버튼 */}
       <PrevButton />
       <div className="h-full flex flex-col">
@@ -61,7 +62,7 @@ const UserInfo = () => {
         </form>
 
         {/* 다음 Button 영역 */}
-        <Button text={"Next"} onClick={handleClick} />
+        <Button text={"Next"} onClick={handleNextPageClick} />
       </div>
     </div>
   );
