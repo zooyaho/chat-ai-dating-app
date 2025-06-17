@@ -9,13 +9,18 @@ import { useState } from "react";
 import { initialPartnerInfo } from "../data/initialState";
 import Input from "../components/Input";
 
-const PartnerInfo = () => {
+interface PartnerInfoPropsType {
+  handlePartnerInfo: (partnerInfo: typeof initialPartnerInfo) => void;
+}
+
+const PartnerInfo = ({ handlePartnerInfo }: PartnerInfoPropsType) => {
   const history = useNavigate();
   const [partnerInfo, setPartnerInfo] = useState(initialPartnerInfo);
 
   // 다음 버튼 클릭 핸들러
   const handleNextPageClick = () => {
     history("/chat");
+    handlePartnerInfo(partnerInfo);
   };
 
   const handleGenderChange = (selectedData: GenderInfoType) => {
@@ -31,7 +36,6 @@ const PartnerInfo = () => {
   return (
     <div className="w-full h-full px-6 pt-10 break-keep overflow-auto">
       <i className="w-[46rem] h-[46rem] rounded-full bg-date-blue-600 fixed -z-10 -left-60 -top-104"></i>
-      {/* <i className="w-168 h-168 rounded-full bg-date-blue-600 fixed -z-10 -left-60 -top-104"></i> */}
       {/* 뒤로가기 버튼 */}
       <PrevButton />
       <div className="h-full flex flex-col">
