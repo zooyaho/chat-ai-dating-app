@@ -9,13 +9,18 @@ import { useState } from "react";
 import { initialUserInfo } from "../data/initialState";
 import Input from "../components/Input";
 
-const UserInfo = () => {
+interface UserInfoPropsType {
+  handleUserInfo: (userInfo: typeof initialUserInfo) => void;
+}
+
+const UserInfo = ({ handleUserInfo }: UserInfoPropsType) => {
   const history = useNavigate();
   const [userInfo, setUserInfo] = useState(initialUserInfo);
 
   // 다음 버튼 클릭 핸들러
   const handleNextPageClick = () => {
     history("/partner-info");
+    handleUserInfo(userInfo);
   };
 
   const handleGenderChange = (selectedData: GenderInfoType) => {

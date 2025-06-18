@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MessageBox from "../components/MessageBox";
 import PrevButton from "../components/PrevButton";
 import type { MessageType } from "../types/chat.type";
-import type { initialPartnerInfo } from "../data/initialState";
+import type { initialPartnerInfo, initialUserInfo } from "../data/initialState";
 
 interface ChatPropsType {
+  userInfo: typeof initialUserInfo;
   partnerInfo: typeof initialPartnerInfo;
 }
 
-const Chat = ({ partnerInfo }: ChatPropsType) => {
+const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const [chatValue, setChatValue] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
 
@@ -33,6 +36,37 @@ const Chat = ({ partnerInfo }: ChatPropsType) => {
 
     setChatValue(""); // 시용자 챗 입력 필드 초기화
   };
+
+  // 초기 사용자/상대방 정보 백엔드에 전송
+  const sendInfo = async () => {
+    console.log("사용자 정보:", userInfo);
+    try {
+      const response = await fetch("http://localhost:8080/info", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userInfo,
+          partnerInfo,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("정보 전송 실패");
+      }
+
+      const data = await response.json();
+      console.log("서버 응답:", data);
+    } catch (error) {
+      console.error("정보 전송 중 오류 발생:", error);
+    }
+  };
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 초기 사용자/상대방 정보 백엔드에 전송
+    sendInfo();
+  }, []);
 
   return (
     <div className="w-full h-full px-6 pt-10 break-keep overflow-auto">

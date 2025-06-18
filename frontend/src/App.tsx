@@ -5,25 +5,36 @@ import UserInfo from "./pages/UserInfo";
 import PartnerInfo from "./pages/PartnerInfo";
 import Chat from "./pages/Chat";
 import { useState } from "react";
-import { initialPartnerInfo } from "./data/initialState";
+import { initialPartnerInfo, initialUserInfo } from "./data/initialState";
 
 function App() {
+  const [userInfo, setUserInfo] = useState(initialUserInfo);
   const [partnerInfo, setPartnerInfo] = useState(initialPartnerInfo);
 
   const handlePartnerInfo = (partnerInfo: typeof initialPartnerInfo) => {
     setPartnerInfo(partnerInfo);
   };
 
+  const handleUserInfo = (userInfo: typeof initialUserInfo) => {
+    setUserInfo(userInfo);
+  };
+
   return (
     <div className="relative w-full h-[100%] max-w-md mx-auto sm:border-x">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/user-info" element={<UserInfo />} />
+        <Route
+          path="/user-info"
+          element={<UserInfo handleUserInfo={handleUserInfo} />}
+        />
         <Route
           path="/partner-info"
           element={<PartnerInfo handlePartnerInfo={handlePartnerInfo} />}
         />
-        <Route path="/chat" element={<Chat partnerInfo={partnerInfo} />} />
+        <Route
+          path="/chat"
+          element={<Chat userInfo={userInfo} partnerInfo={partnerInfo} />}
+        />
       </Routes>
     </div>
   );
