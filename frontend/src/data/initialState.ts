@@ -4,7 +4,7 @@ export const initialUserInfo = {
   gender: {
     id: 1,
     type: "male",
-    text: "남자",
+    text: "male",
   },
   name: "",
   age: "",
@@ -17,7 +17,7 @@ export const initialPartnerInfo = {
   gender: {
     id: 1,
     type: "male",
-    text: "남자",
+    text: "male",
   },
   name: "",
   age: "",

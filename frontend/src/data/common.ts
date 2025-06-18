@@ -3,13 +3,13 @@ import type { GenderInfoType } from "../types/genderInfo.type";
 const maleInfo: GenderInfoType = {
   id: 1,
   type: "male",
-  text: "남자",
+  text: "male",
 };
 
 const femaleInfo: GenderInfoType = {
   id: 2,
   type: "female",
-  text: "여자",
+  text: "female",
 };
 
 export const userInfoFields = [

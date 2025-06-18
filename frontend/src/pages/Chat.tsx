@@ -14,6 +14,39 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
 
   const [chatValue, setChatValue] = useState("");
   const [messages, setMessages] = useState<MessageType[]>([]);
+  const [infoMessage, setInfoMessage] = useState<MessageType[]>([]); // ai에 정보 설정하는 메시지
+
+  const sendMessage = async (userMessage: MessageType) => {
+    // 메시지 전송 로직
+    const sendMessages = [...infoMessage, ...messages, userMessage];
+    try {
+      const response = await fetch(`${API_BASE_URL}/message`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: sendMessages }),
+      });
+
+      if (!response.ok) {
+        throw new Error("응답 실패");
+      }
+
+      const result = await response.json();
+      console.log("[chat] 서버 응답:", result);
+      const assistantMessage = result.data as MessageType;
+      // 메시지 목록 업데이트: 메시지 목록에 사용자 메시지와 어시스턴트 응답 추가
+      console.log("[chat] assistantMessage:", assistantMessage);
+      console.log("[chat] 업데이트된 메세지들:", [
+        ...messages,
+        userMessage,
+        assistantMessage,
+      ]);
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error("메시지 전송 중 오류 발생:", error);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,22 +59,15 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
       content: chatValue,
     } as MessageType;
 
-    const assistantResult = {
-      role: "assistant",
-      content: `응답: ${chatValue}`, // 실제 응답 로직으로 대체 필요
-    } as MessageType;
-
-    // 메시지 목록 업데이트: 메시지 목록에 사용자 메시지와 어시스턴트 응답 추가
-    setMessages((prev) => [...prev, userChatResult, assistantResult]);
-
     setChatValue(""); // 시용자 챗 입력 필드 초기화
+    setMessages((prev) => [...prev, userChatResult]);
+    sendMessage(userChatResult); // 메시지 전송 함수 호출
   };
 
   // 초기 사용자/상대방 정보 백엔드에 전송
   const sendInfo = async () => {
-    console.log("사용자 정보:", userInfo);
     try {
-      const response = await fetch("http://localhost:8080/info", {
+      const response = await fetch(`${API_BASE_URL}/info`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,8 +82,10 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
         throw new Error("정보 전송 실패");
       }
 
-      const data = await response.json();
-      console.log("서버 응답:", data);
+      const result = await response.json();
+      const initialMessages = result.data as MessageType[];
+      console.log("[sendInfo] 초기 메시지 응답 data:", initialMessages);
+      setInfoMessage(initialMessages); // 초기 정보 메시지 세팅
     } catch (error) {
       console.error("정보 전송 중 오류 발생:", error);
     }
