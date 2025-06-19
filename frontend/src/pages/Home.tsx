@@ -18,6 +18,16 @@ const Home = () => {
       <div className="h-full flex flex-col">
         {/* 타이틀 영역 */}
         <Title
+          mainTitle="1 Second Before the Date"
+          subTitle={
+            <>
+              Not sure what to say on a first date?
+              <br />
+              Practice ahead and boost your confidence!
+            </>
+          }
+        />
+        {/* <Title
           mainTitle="소개팅 1초전"
           subTitle={
             <>
@@ -26,7 +36,7 @@ const Home = () => {
               미리 연습하고 가보세요!
             </>
           }
-        />
+        /> */}
         {/* 시작 Button*/}
         <Button text={"Get started"} onClick={handleClick} />
       </div>

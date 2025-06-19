@@ -24,13 +24,12 @@ const PartnerInfo = ({ handlePartnerInfo }: PartnerInfoPropsType) => {
   };
 
   const handleGenderChange = (selectedData: GenderInfoType) => {
-    // console.log("selectedData:", selectedData);
     const resultData = { ...partnerInfo, gender: selectedData };
     setPartnerInfo(resultData);
   };
 
   const handleFieldChange = (label: string, value: string) => {
-    const resultData = { ...partnerInfo, [label]: value };
+    const resultData = { ...partnerInfo, [label]: value.trim() };
     setPartnerInfo(resultData);
   };
   return (
@@ -40,10 +39,10 @@ const PartnerInfo = ({ handlePartnerInfo }: PartnerInfoPropsType) => {
       <PrevButton />
       <div className="h-full flex flex-col">
         <div className="px-2 pt-6">
-          <Title mainTitle="소개팅 상대방을 알려주세요" />
+          <Title mainTitle="Tell us about your date" />
         </div>
         {/* info 영역 */}
-        <form className="pt-20">
+        <form className="pt-6">
           {/* 성별 체크 */}
           <GenderRadioGroup
             items={genderList}

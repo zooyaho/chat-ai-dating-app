@@ -30,7 +30,7 @@ const UserInfo = ({ handleUserInfo }: UserInfoPropsType) => {
   };
 
   const handleFieldChange = (label: string, value: string) => {
-    const resultData = { ...userInfo, [label]: value };
+    const resultData = { ...userInfo, [label]: value.trim() };
     setUserInfo(resultData);
   };
 
@@ -41,10 +41,11 @@ const UserInfo = ({ handleUserInfo }: UserInfoPropsType) => {
       <PrevButton />
       <div className="h-full flex flex-col">
         <div className="px-2 pt-6">
-          <Title mainTitle="당신을 알려주세요" />
+          <Title mainTitle="Tell us about yourself" />
         </div>
         {/* info 영역 */}
-        <form className="pt-20">
+        <form className="pt-6">
+          {/* <form className="pt-20"> */}
           {/* 성별 체크 */}
           <GenderRadioGroup
             items={genderList}

@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import MessageBox from "../components/MessageBox";
 import PrevButton from "../components/PrevButton";
 import type { MessageType } from "../types/chat.type";
 import type { initialPartnerInfo, initialUserInfo } from "../data/initialState";
+import { MoonLoader } from "react-spinners";
 
 interface ChatPropsType {
   userInfo: typeof initialUserInfo;
@@ -16,9 +17,13 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [infoMessage, setInfoMessage] = useState<MessageType[]>([]); // ai에 정보 설정하는 메시지
 
+  const [isInfoLoading, setIsInfoLoading] = useState(false);
+  const [isMessageLoading, setIsMessageLoading] = useState(false);
+
   const sendMessage = async (userMessage: MessageType) => {
     // 메시지 전송 로직
     const sendMessages = [...infoMessage, ...messages, userMessage];
+    setIsMessageLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/message`, {
         method: "POST",
@@ -46,6 +51,7 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
     } catch (error) {
       console.error("메시지 전송 중 오류 발생:", error);
     }
+    setIsMessageLoading(false);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -65,7 +71,8 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
   };
 
   // 초기 사용자/상대방 정보 백엔드에 전송
-  const sendInfo = async () => {
+  const sendInfo = useCallback(async () => {
+    setIsInfoLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/info`, {
         method: "POST",
@@ -89,27 +96,39 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
     } catch (error) {
       console.error("정보 전송 중 오류 발생:", error);
     }
-  };
+    setIsInfoLoading(false);
+  }, [API_BASE_URL, partnerInfo, userInfo]);
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 사용자/상대방 정보 백엔드에 전송
     sendInfo();
-  }, []);
+  }, [sendInfo]);
 
   return (
     <div className="w-full h-full px-6 pt-10 break-keep overflow-auto">
+      {isInfoLoading && (
+        <div className="absolute inset-0 bg-white bg-opacity-70">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <MoonLoader color="#846FFE" />
+          </div>
+        </div>
+      )}
       {/* 뒤로가기 버튼 */}
       <PrevButton />
       <div className="h-full flex flex-col">
         {/* 헤더 영역 */}
         <div className="-mx-6 -mt-10 py-7 bg-date-blue-600">
           <span className="block text-xl text-center text-white">
-            {partnerInfo.name}님과의 채팅
+            Chatting with {partnerInfo.name}
           </span>
         </div>
         {/* 채팅 영역 */}
         <div className="overflow-auto">
-          <MessageBox messages={messages} partnerInfo={partnerInfo} />
+          <MessageBox
+            messages={messages}
+            partnerInfo={partnerInfo}
+            isLoading={isMessageLoading}
+          />
         </div>
         {/* 메시지 입력 영역 */}
         <form
@@ -122,6 +141,7 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
               className="w-full text-sm px-3 py-2 h-full block rounded-xl bg-gray-100 focus:"
               type="text"
               value={chatValue}
+              disabled={isInfoLoading || isMessageLoading}
               onChange={(e) => setChatValue(e.target.value)}
             />
           </div>
@@ -130,7 +150,7 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
             form="sendForm"
             className="w-10 min-w-10 h-10 inline-block rounded-full bg-date-blue-600 text-none px-2 bg-[url('../public/images/send.svg')] bg-no-repeat bg-center"
           >
-            보내기
+            Send
           </button>
         </form>
       </div>

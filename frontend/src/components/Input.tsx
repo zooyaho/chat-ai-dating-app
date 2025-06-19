@@ -18,8 +18,9 @@ const Input = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setValue(value);
-    _onChange?.(label, value);
+    const resultValue = label === "mbti" ? value.toUpperCase() : value; // mbti는 대문자로 변환
+    setValue(resultValue);
+    _onChange?.(label, resultValue);
   };
   return (
     <div className="py-2 first:pt-0 last:pb-0 ">

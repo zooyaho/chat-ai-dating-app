@@ -13,7 +13,7 @@ const femaleInfo: GenderInfoType = {
 };
 
 export const userInfoFields = [
-  { id: 1, label: "name", text: "Name", type: "text", placeholder: "홍길동" },
+  { id: 1, label: "name", text: "Name", type: "text", placeholder: "John Doe" },
   { id: 2, label: "age", text: "Age", type: "number", placeholder: "25" },
   { id: 3, label: "mbti", text: "Mbti", type: "text", placeholder: "ENTJ" },
 ];
