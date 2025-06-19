@@ -40,15 +40,10 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
       }
 
       const result = await response.json();
-      console.log("[chat] 서버 응답:", result);
+      // console.log("[chat] 서버 응답:", result);
       const assistantMessage = result.data as MessageType;
       // 메시지 목록 업데이트: 메시지 목록에 사용자 메시지와 어시스턴트 응답 추가
-      console.log("[chat] assistantMessage:", assistantMessage);
-      console.log("[chat] 업데이트된 메세지들:", [
-        ...messages,
-        userMessage,
-        assistantMessage,
-      ]);
+      // console.log("[chat] assistantMessage:", assistantMessage);
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("메시지 전송 중 오류 발생:", error);
@@ -59,8 +54,6 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (chatValue.trim() === "") return; // 빈 메시지 전송 방지
-    // 메시지 전송 로직 추가
-    console.log("메시지 전송:", chatValue);
 
     const userChatResult = {
       role: "user",
@@ -93,7 +86,7 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
 
       const result = await response.json();
       const initialMessages = result.data as MessageType[];
-      console.log("[sendInfo] 초기 메시지 응답 data:", initialMessages);
+
       setInfoMessage(initialMessages); // 초기 정보 메시지 세팅
     } catch (error) {
       console.error("정보 전송 중 오류 발생:", error);
