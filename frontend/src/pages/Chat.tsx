@@ -132,7 +132,7 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
         </div>
       )}
       {/* 뒤로가기 버튼 */}
-      <PrevButton />
+      <PrevButton path="/partner-info" />
       <div className="h-full flex flex-col">
         {/* 헤더 영역 */}
         <div className="-mx-6 -mt-10 py-7 bg-date-blue-600">

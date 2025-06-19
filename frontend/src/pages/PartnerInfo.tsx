@@ -55,9 +55,9 @@ const PartnerInfo = ({ userInfo, handlePartnerInfo }: PartnerInfoPropsType) => {
 
   return (
     <div className="w-full h-full px-6 pt-10 break-keep overflow-auto">
-      <i className="w-[46rem] h-[46rem] rounded-full bg-date-blue-600 fixed -z-10 -left-60 -top-104"></i>
+      <i className="w-[46rem] h-[46rem] rounded-full bg-date-blue-600 fixed -z-10 -left-60 -top-104 sm:-top-1/2 sm:left-1/2 sm:transform sm:-translate-x-1/2"></i>
       {/* 뒤로가기 버튼 */}
-      <PrevButton />
+      <PrevButton path="/user-info" />
       <div className="h-full flex flex-col">
         <div className="px-2 pt-6">
           <Title mainTitle="Tell us about your date" />

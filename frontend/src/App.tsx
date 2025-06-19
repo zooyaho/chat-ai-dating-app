@@ -20,7 +20,7 @@ function App() {
   };
 
   return (
-    <div className="relative w-full h-[100%] max-w-md mx-auto sm:border-x">
+    <div className="relative w-full h-[100%] max-w-md mx-auto">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route

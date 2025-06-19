@@ -1,10 +1,18 @@
 import { useNavigate } from "react-router-dom";
 
-const PrevButton = () => {
+interface PrevButtonPropsType {
+  path?: string;
+}
+
+const PrevButton = ({ path }: PrevButtonPropsType) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(-1); // 뒤로가기
+    if (path) {
+      navigate(path); // 명시 경로 이동
+    } else {
+      navigate(-1); // 뒤로가기
+    }
   };
 
   return (
