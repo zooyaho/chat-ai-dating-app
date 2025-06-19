@@ -5,21 +5,22 @@ import PrevButton from "../components/PrevButton";
 import GenderRadioGroup from "../components/GenderRadioGroup";
 import { genderList, userInfoFields } from "../data/common";
 import type { GenderInfoType } from "../types/genderInfo.type";
-import { useState } from "react";
-import { initialPartnerInfo } from "../data/initialState";
+import { useEffect, useMemo, useState } from "react";
+import { initialPartnerInfo, initialUserInfo } from "../data/initialState";
 import Input from "../components/Input";
 
 interface PartnerInfoPropsType {
+  userInfo: typeof initialUserInfo;
   handlePartnerInfo: (partnerInfo: typeof initialPartnerInfo) => void;
 }
 
-const PartnerInfo = ({ handlePartnerInfo }: PartnerInfoPropsType) => {
-  const history = useNavigate();
+const PartnerInfo = ({ userInfo, handlePartnerInfo }: PartnerInfoPropsType) => {
+  const navigate = useNavigate();
   const [partnerInfo, setPartnerInfo] = useState(initialPartnerInfo);
 
   // 다음 버튼 클릭 핸들러
   const handleNextPageClick = () => {
-    history("/chat");
+    navigate("/chat");
     handlePartnerInfo(partnerInfo);
   };
 
@@ -32,6 +33,26 @@ const PartnerInfo = ({ handlePartnerInfo }: PartnerInfoPropsType) => {
     const resultData = { ...partnerInfo, [label]: value.trim() };
     setPartnerInfo(resultData);
   };
+
+  const isFormValid = useMemo(
+    () =>
+      partnerInfo.name.trim() !== "" &&
+      partnerInfo.age.trim() !== "" &&
+      !!partnerInfo.mbti,
+    [partnerInfo.age, partnerInfo.mbti, partnerInfo.name]
+  );
+
+  useEffect(() => {
+    const isUserInfoFilled =
+      userInfo.name.trim() !== "" &&
+      userInfo.age.trim() !== "" &&
+      userInfo.mbti !== null;
+
+    if (!isUserInfoFilled) {
+      navigate("/user-info");
+    }
+  }, [userInfo, navigate]);
+
   return (
     <div className="w-full h-full px-6 pt-10 break-keep overflow-auto">
       <i className="w-[46rem] h-[46rem] rounded-full bg-date-blue-600 fixed -z-10 -left-60 -top-104"></i>
@@ -69,6 +90,7 @@ const PartnerInfo = ({ handlePartnerInfo }: PartnerInfoPropsType) => {
           text={"Go Chat"}
           color="bg-date-blue-700"
           onClick={handleNextPageClick}
+          disabled={!isFormValid}
         />
       </div>
     </div>

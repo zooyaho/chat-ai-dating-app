@@ -1,10 +1,17 @@
-interface ButtonPropsType {
+interface ButtonPropsType
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
   onClick?: () => void;
   color?: string;
 }
 
-const Button = ({ text, color, onClick }: ButtonPropsType) => {
+const Button = ({
+  text,
+  color,
+  onClick,
+  disabled,
+  ...restAttribute
+}: ButtonPropsType) => {
   const handleClick = () => {
     onClick?.();
   };
@@ -14,9 +21,10 @@ const Button = ({ text, color, onClick }: ButtonPropsType) => {
       <button
         className={`w-full py-4 px-1 block rounded-3xl text-white text-sm font-medium ${
           color || "bg-date-pink-700"
-        }`}
+        } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
         type="button"
         onClick={handleClick}
+        {...restAttribute}
       >
         {text}
       </button>

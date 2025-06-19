@@ -4,6 +4,7 @@ import PrevButton from "../components/PrevButton";
 import type { MessageType } from "../types/chat.type";
 import type { initialPartnerInfo, initialUserInfo } from "../data/initialState";
 import { MoonLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 interface ChatPropsType {
   userInfo: typeof initialUserInfo;
@@ -11,6 +12,7 @@ interface ChatPropsType {
 }
 
 const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
+  const navigate = useNavigate();
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [chatValue, setChatValue] = useState("");
@@ -98,6 +100,22 @@ const Chat = ({ userInfo, partnerInfo }: ChatPropsType) => {
     }
     setIsInfoLoading(false);
   }, [API_BASE_URL, partnerInfo, userInfo]);
+
+  useEffect(() => {
+    const isUserValid =
+      userInfo.name.trim() !== "" &&
+      userInfo.age.trim() !== "" &&
+      userInfo.mbti !== null;
+
+    const isPartnerValid =
+      partnerInfo.name.trim() !== "" &&
+      partnerInfo.age.trim() !== "" &&
+      partnerInfo.mbti !== null;
+
+    if (!isUserValid || !isPartnerValid) {
+      navigate("/user-info");
+    }
+  }, [userInfo, partnerInfo, navigate]);
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 사용자/상대방 정보 백엔드에 전송

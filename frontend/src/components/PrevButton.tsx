@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
 const PrevButton = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    history(-1); // 뒤로가기
+    navigate(-1); // 뒤로가기
   };
 
   return (

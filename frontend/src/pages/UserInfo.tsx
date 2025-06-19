@@ -5,7 +5,7 @@ import PrevButton from "../components/PrevButton";
 import GenderRadioGroup from "../components/GenderRadioGroup";
 import { genderList, userInfoFields } from "../data/common";
 import type { GenderInfoType } from "../types/genderInfo.type";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { initialUserInfo } from "../data/initialState";
 import Input from "../components/Input";
 
@@ -14,12 +14,12 @@ interface UserInfoPropsType {
 }
 
 const UserInfo = ({ handleUserInfo }: UserInfoPropsType) => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(initialUserInfo);
 
   // 다음 버튼 클릭 핸들러
   const handleNextPageClick = () => {
-    history("/partner-info");
+    navigate("/partner-info");
     handleUserInfo(userInfo);
   };
 
@@ -33,6 +33,14 @@ const UserInfo = ({ handleUserInfo }: UserInfoPropsType) => {
     const resultData = { ...userInfo, [label]: value.trim() };
     setUserInfo(resultData);
   };
+
+  const isFormValid = useMemo(
+    () =>
+      userInfo.name.trim() !== "" &&
+      userInfo.age.trim() !== "" &&
+      !!userInfo.mbti,
+    [userInfo.age, userInfo.mbti, userInfo.name]
+  );
 
   return (
     <div className="w-full h-full px-6 pt-10 break-keep overflow-auto">
@@ -68,7 +76,11 @@ const UserInfo = ({ handleUserInfo }: UserInfoPropsType) => {
         </form>
 
         {/* 다음 Button 영역 */}
-        <Button text={"Next"} onClick={handleNextPageClick} />
+        <Button
+          text={"Next"}
+          onClick={handleNextPageClick}
+          disabled={!isFormValid}
+        />
       </div>
     </div>
   );

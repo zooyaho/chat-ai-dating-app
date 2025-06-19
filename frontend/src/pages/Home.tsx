@@ -3,10 +3,10 @@ import Button from "../components/Button";
 import Title from "../components/Title";
 
 const Home = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    history("/user-info");
+    navigate("/user-info");
   };
 
   return (

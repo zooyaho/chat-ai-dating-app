@@ -29,7 +29,12 @@ function App() {
         />
         <Route
           path="/partner-info"
-          element={<PartnerInfo handlePartnerInfo={handlePartnerInfo} />}
+          element={
+            <PartnerInfo
+              userInfo={userInfo}
+              handlePartnerInfo={handlePartnerInfo}
+            />
+          }
         />
         <Route
           path="/chat"
