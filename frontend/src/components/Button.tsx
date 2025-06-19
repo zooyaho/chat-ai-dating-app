@@ -23,6 +23,7 @@ const Button = ({
           color || "bg-date-pink-700"
         } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
         type="button"
+        disabled={disabled}
         onClick={handleClick}
         {...restAttribute}
       >
